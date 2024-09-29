@@ -1,0 +1,42 @@
+$before_width: 28px;
+$border_radius: 24px;
+
+.wrapper {
+    background-color: #FFFFFF;
+    border-radius: $border_radius;
+    display: flex;
+    margin: 0 $before_width 24px $before_width;
+
+    &:hover {
+        box-shadow: 0 0 16px 0 #662C0040;
+        margin-left: 0;
+        cursor: grab;
+
+        &::before {
+            content: "";
+            width: $before_width;
+            background-color: #0000000F;
+            border-radius: $border_radius 0 0 $border_radius;
+        }
+    }
+}
+
+.container {
+    display: flex;
+    padding: 20px;
+    gap: 32px;
+}
+
+.title {
+    font-weight: 600;   
+}
+
+.id {
+    color: #FF6D00;
+}
+
+.timing {
+    background-color: #0000000F;
+    border-radius: 16px;
+    padding: 4px 12px;
+}

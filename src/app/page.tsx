@@ -1,4 +1,12 @@
+import { Project } from '@/components/project/component';
+import { data } from './data.';
+
 export default function Home() {
-    const a = 'abc';
-    return <div></div>;
+    return (
+        <>
+            {data.map((project) => (
+                <Project key={project.id} project={project} />
+            ))}
+        </>
+    );
 }
