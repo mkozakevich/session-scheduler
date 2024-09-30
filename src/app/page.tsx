@@ -18,6 +18,7 @@ import {
 } from 'date-fns';
 import { IProject } from '@/interfaces/IProject';
 import { Project } from '@/components/project/component';
+import { arrayMove } from '@dnd-kit/sortable';
 
 export default function Home() {
     const [dateFrom, setDateFrom] = useState(new Date('2024-04-01'));
@@ -26,6 +27,7 @@ export default function Home() {
         mapDataToTimeline(data, dateFrom, dateTo)
     );
     const [activeId, setActiveId] = useState(null);
+    const id = useId();
 
     function handleDragStart(event: any) {
         const { active } = event;
@@ -36,22 +38,75 @@ export default function Home() {
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event;
 
-        console.log(event);
-
-        // if (active.id !== over?.id) {
-        //     setTimeline((projects) => {
-        //         const oldIndex = projects.findIndex(
-        //             (project) => project.id === active.id
-        //         );
-        //         const newIndex = projects.findIndex(
-        //             (project) => project.id === over?.id
-        //         );
-
-        //         return arrayMove(projects, oldIndex, newIndex);
-        //     });
-        // }
-
         setActiveId(null);
+
+        if (active.id === over?.id) {
+            return;
+        }
+
+        let activeContainerKey: string | null = null;
+        let overContainerKey: string | null = null;
+        let activeIndex = 0;
+        let overIndex = 0;
+
+        for (const [key, value] of Object.entries(timeline)) {
+            const activeResultOfIndexSearch = value.findIndex(
+                (v) => v.id === active.id
+            );
+            const overResultOfIndexSearch = value.findIndex(
+                (v) => v.id === over?.id
+            );
+
+            if (activeResultOfIndexSearch !== -1) {
+                activeContainerKey = key;
+                activeIndex = activeResultOfIndexSearch;
+            }
+
+            if (overResultOfIndexSearch !== -1) {
+                overContainerKey = key;
+                overIndex = overResultOfIndexSearch;
+            }
+        }
+
+        if (activeContainerKey === overContainerKey) {
+            setTimeline((timeline) => {
+                if (!activeContainerKey) {
+                    return timeline;
+                }
+
+                const updatedArray = arrayMove(
+                    timeline[activeContainerKey],
+                    activeIndex,
+                    overIndex
+                );
+
+                return {
+                    ...timeline,
+                    [activeContainerKey]: updatedArray,
+                };
+            });
+        } else {
+            setTimeline((timeline) => {
+                if (!activeContainerKey || !overContainerKey) {
+                    return timeline;
+                }
+
+                const movedElement = timeline[activeContainerKey][activeIndex];
+                const updatedActiveArray = timeline[activeContainerKey].filter(
+                    (v) => v.id !== active.id
+                );
+                const updatedOverArray = [
+                    ...timeline[overContainerKey],
+                    movedElement,
+                ];
+
+                return {
+                    ...timeline,
+                    [activeContainerKey]: updatedActiveArray,
+                    [overContainerKey]: updatedOverArray,
+                };
+            });
+        }
     };
 
     const getDaysContent = () => {
@@ -72,8 +127,6 @@ export default function Home() {
 
         return content;
     };
-
-    const id = useId();
 
     return (
         <DndContext
