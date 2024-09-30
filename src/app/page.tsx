@@ -2,7 +2,12 @@
 
 import { data } from './data.';
 import { useId, useState } from 'react';
-import { DndContext, DragEndEvent, closestCenter } from '@dnd-kit/core';
+import {
+    DndContext,
+    DragEndEvent,
+    DragOverlay,
+    closestCenter,
+} from '@dnd-kit/core';
 import { Day } from '@/components/day/component';
 import {
     addDays,
@@ -12,17 +17,26 @@ import {
     isValid,
 } from 'date-fns';
 import { IProject } from '@/interfaces/IProject';
+import { Project } from '@/components/project/component';
 
 export default function Home() {
     const [dateFrom, setDateFrom] = useState(new Date('2024-04-01'));
     const [dateTo, setDateTo] = useState(new Date('2024-04-02'));
-
     const [timeline, setTimeline] = useState(
         mapDataToTimeline(data, dateFrom, dateTo)
     );
+    const [activeId, setActiveId] = useState(null);
+
+    function handleDragStart(event: any) {
+        const { active } = event;
+
+        setActiveId(active.id);
+    }
 
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event;
+
+        console.log(event);
 
         // if (active.id !== over?.id) {
         //     setTimeline((projects) => {
@@ -36,6 +50,8 @@ export default function Home() {
         //         return arrayMove(projects, oldIndex, newIndex);
         //     });
         // }
+
+        setActiveId(null);
     };
 
     const getDaysContent = () => {
@@ -61,11 +77,21 @@ export default function Home() {
 
     return (
         <DndContext
+            onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
             collisionDetection={closestCenter}
             id={id}
         >
             {getDaysContent()}
+            <DragOverlay>
+                {activeId ? (
+                    <Project
+                        project={
+                            data.find((project) => project.id === activeId)!
+                        }
+                    />
+                ) : null}
+            </DragOverlay>
         </DndContext>
     );
 }
