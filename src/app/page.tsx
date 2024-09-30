@@ -68,6 +68,28 @@ export default function Home() {
             }
         }
 
+        if (typeof over?.id === 'string') {
+            setTimeline((timeline) => {
+                if (!activeContainerKey) {
+                    return timeline;
+                }
+
+                const movedElement = timeline[activeContainerKey][activeIndex];
+                const updatedActiveArray = timeline[activeContainerKey].filter(
+                    (v) => v.id !== active.id
+                );
+                const updatedOverArray = [...timeline[over.id], movedElement];
+
+                return {
+                    ...timeline,
+                    [activeContainerKey]: updatedActiveArray,
+                    [over.id]: updatedOverArray,
+                };
+            });
+
+            return;
+        }
+
         if (activeContainerKey === overContainerKey) {
             setTimeline((timeline) => {
                 if (!activeContainerKey) {

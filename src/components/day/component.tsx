@@ -7,6 +7,7 @@ import { Project } from '../project/component';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale/ru';
 import { useDroppable } from '@dnd-kit/core';
+import styles from './styles.module.scss';
 
 export const Day = ({
     id,
@@ -32,7 +33,7 @@ export const Day = ({
                 items={projects}
                 strategy={verticalListSortingStrategy}
             >
-                <div ref={setNodeRef}>
+                <div className={styles.projectsContainer} ref={setNodeRef}>
                     {projects.map((project) => (
                         <Project key={project.id} project={project} />
                     ))}
