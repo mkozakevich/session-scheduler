@@ -1,6 +1,6 @@
-import { IProject } from '../interfaces/IProject';
+import { IProject, IProjectBm } from '../interfaces/IProject';
 
-export const data: IProject[] = [
+const dataBm: IProjectBm[] = [
     {
         id: 858,
         name: 'DataFlow вычислительная система: Телекоммуникационная система суперкомпьютера',
@@ -32,3 +32,8 @@ export const data: IProject[] = [
         startDateTime: '2024-04-01T12:40:00',
     },
 ];
+
+export const data: IProject[] = dataBm.map((item) => ({
+    ...item,
+    startDateTime: new Date(item.startDateTime),
+}));

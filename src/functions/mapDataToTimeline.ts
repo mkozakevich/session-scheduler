@@ -13,12 +13,12 @@ export const mapDataToTimeline = (
 
     for (let i = 1; i <= diffDays; i++) {
         const currentDayProjects = projects.filter((project) =>
-            isSameDay(new Date(project.startDateTime), currentDate)
+            isSameDay(project.startDateTime, currentDate)
         );
 
         const otherProjects = projects.filter(
             (project) =>
-                !isSameDay(new Date(project.startDateTime), currentDate)
+                !isSameDay(project.startDateTime, currentDate)
         );
 
         timeline[formatISO(currentDate, { representation: 'date' })] =
