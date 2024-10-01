@@ -5,10 +5,10 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import DraggableIcon from '../../assets/draggable-icon.svg';
 import { format } from 'date-fns';
-import { calculateEndDate } from '@/functions/calculateEndDate';
 
 export const Project = ({ project }: { project: IProject }) => {
-    const { id, name, numberOfParticipants, startDateTime } = project;
+    const { id, name, numberOfParticipants, startDateTime, endDateTime } =
+        project;
 
     const { attributes, listeners, setNodeRef, transform, transition } =
         useSortable({ id });
@@ -19,9 +19,8 @@ export const Project = ({ project }: { project: IProject }) => {
     };
 
     const timeFormatStr = 'HH:mm';
-    const endDate = calculateEndDate(startDateTime, numberOfParticipants);
     const startTime = format(startDateTime, timeFormatStr);
-    const endTime = format(endDate, timeFormatStr);
+    const endTime = format(endDateTime, timeFormatStr);
 
     return (
         <div

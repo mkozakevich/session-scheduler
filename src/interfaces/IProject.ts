@@ -7,4 +7,5 @@ export interface IProjectBm {
 
 export interface IProject extends Omit<IProjectBm, 'startDateTime'> {
     startDateTime: Date;
+    endDateTime: Date;
 }

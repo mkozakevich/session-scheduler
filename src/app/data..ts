@@ -1,3 +1,4 @@
+import { calculateEndDate } from '@/functions/calculateEndDate';
 import { IProject, IProjectBm } from '../interfaces/IProject';
 
 const dataBm: IProjectBm[] = [
@@ -33,7 +34,12 @@ const dataBm: IProjectBm[] = [
     },
 ];
 
-export const data: IProject[] = dataBm.map((item) => ({
-    ...item,
-    startDateTime: new Date(item.startDateTime),
-}));
+export const data: IProject[] = dataBm.map((item) => {
+    const startDateTime = new Date(item.startDateTime);
+
+    return {
+        ...item,
+        startDateTime,
+        endDateTime: calculateEndDate(startDateTime, item.numberOfParticipants),
+    };
+});

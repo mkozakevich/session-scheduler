@@ -13,10 +13,11 @@ import { isValid } from 'date-fns';
 import { Project } from '@/components/project/component';
 import { arrayMove } from '@dnd-kit/sortable';
 import { mapDataToTimeline } from '@/functions/mapDataToTimeline';
+import { rebuildTimeline } from '@/functions/rebuildTimeline';
 
 export default function Home() {
-    const [dateFrom, setDateFrom] = useState(new Date('2024-04-01'));
-    const [dateTo, setDateTo] = useState(new Date('2024-04-02'));
+    const [dateFrom, setDateFrom] = useState(new Date('2024-04-01T10:00:00'));
+    const [dateTo, setDateTo] = useState(new Date('2024-04-02T19:00:00'));
     const [timeline, setTimeline] = useState(
         mapDataToTimeline(data, dateFrom, dateTo)
     );
@@ -74,11 +75,15 @@ export default function Home() {
                 );
                 const updatedOverArray = [...timeline[over.id], movedElement];
 
-                return {
-                    ...timeline,
-                    [activeContainerKey]: updatedActiveArray,
-                    [over.id]: updatedOverArray,
-                };
+                return rebuildTimeline(
+                    {
+                        ...timeline,
+                        [activeContainerKey]: updatedActiveArray,
+                        [over.id]: updatedOverArray,
+                    },
+                    dateFrom,
+                    dateTo
+                );
             });
 
             return;
@@ -96,10 +101,14 @@ export default function Home() {
                     overIndex
                 );
 
-                return {
-                    ...timeline,
-                    [activeContainerKey]: updatedArray,
-                };
+                return rebuildTimeline(
+                    {
+                        ...timeline,
+                        [activeContainerKey]: updatedArray,
+                    },
+                    dateFrom,
+                    dateTo
+                );
             });
         } else {
             setTimeline((timeline) => {
@@ -116,11 +125,15 @@ export default function Home() {
                     movedElement,
                 ];
 
-                return {
-                    ...timeline,
-                    [activeContainerKey]: updatedActiveArray,
-                    [overContainerKey]: updatedOverArray,
-                };
+                return rebuildTimeline(
+                    {
+                        ...timeline,
+                        [activeContainerKey]: updatedActiveArray,
+                        [overContainerKey]: updatedOverArray,
+                    },
+                    dateFrom,
+                    dateTo
+                );
             });
         }
     };
