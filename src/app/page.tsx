@@ -68,7 +68,7 @@ export default function Home() {
             }
         }
 
-        if (typeof over?.id === 'string') {
+        if (typeof over?.id === 'string' && activeContainerKey !== over.id) {
             setTimeline((timeline) => {
                 if (!activeContainerKey) {
                     return timeline;
@@ -191,10 +191,10 @@ const mapDataToTimeline = (
                 !isSameDay(new Date(project.startDateTime), currentDate)
         );
 
-        currentDate = addDays(currentDate, 1);
-
         timeline[formatISO(currentDate, { representation: 'date' })] =
             currentDayProjects;
+
+        currentDate = addDays(currentDate, 1);
 
         projects = otherProjects;
     }
