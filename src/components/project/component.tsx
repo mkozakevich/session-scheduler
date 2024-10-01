@@ -4,9 +4,10 @@ import declineWord from 'decline-word';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import DraggableIcon from '../../assets/draggable-icon.svg';
+import { addMinutes, format } from 'date-fns';
 
 export const Project = ({ project }: { project: IProject }) => {
-    const { id, name, numberOfParticipants } = project;
+    const { id, name, numberOfParticipants, startDateTime } = project;
 
     const { attributes, listeners, setNodeRef, transform, transition } =
         useSortable({ id });
@@ -15,6 +16,11 @@ export const Project = ({ project }: { project: IProject }) => {
         transform: CSS.Transform.toString(transform),
         transition,
     };
+
+    const startDate = new Date(startDateTime);
+    const endDate = addMinutes(startDateTime, 20 + 5 * numberOfParticipants);
+    const startTime = format(startDateTime, 'HH:mm');
+    const endTime = format(endDate, 'HH:mm');
 
     return (
         <div
@@ -30,7 +36,9 @@ export const Project = ({ project }: { project: IProject }) => {
             </div>
             <div className={styles.container}>
                 <div>
-                    <div className={styles.timing}>10:00 – 10:25</div>
+                    <div className={styles.timing}>
+                        {startTime} – {endTime}
+                    </div>
                 </div>
                 <div>
                     <div className={styles.title}>
