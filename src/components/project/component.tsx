@@ -6,7 +6,13 @@ import { CSS } from '@dnd-kit/utilities';
 import DraggableIcon from '../../assets/draggable-icon.svg';
 import { format } from 'date-fns';
 
-export const Project = ({ project }: { project: IProject }) => {
+export const Project = ({
+    project,
+    noTime,
+}: {
+    project: IProject;
+    noTime?: boolean;
+}) => {
     const { id, name, numberOfParticipants, startDateTime, endDateTime } =
         project;
 
@@ -37,7 +43,7 @@ export const Project = ({ project }: { project: IProject }) => {
             <div className={styles.container}>
                 <div>
                     <div className={styles.timing}>
-                        {startTime} – {endTime}
+                        {!noTime && `${startTime} – ${endTime}`}
                     </div>
                 </div>
                 <div>

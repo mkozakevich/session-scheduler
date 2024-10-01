@@ -171,6 +171,7 @@ export default function Home() {
                         project={
                             data.find((project) => project.id === activeId)!
                         }
+                        noTime
                     />
                 ) : null}
             </DragOverlay>

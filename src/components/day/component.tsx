@@ -35,7 +35,11 @@ export const Day = ({
             >
                 <div className={styles.projectsContainer} ref={setNodeRef}>
                     {projects.map((project) => (
-                        <Project key={project.id} project={project} />
+                        <Project
+                            key={project.id}
+                            project={project}
+                            noTime={!date}
+                        />
                     ))}
                 </div>
             </SortableContext>
