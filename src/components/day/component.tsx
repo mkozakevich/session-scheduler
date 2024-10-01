@@ -24,11 +24,11 @@ export const Day = ({
 
     return (
         <>
-            <div>
+            <h2 className={styles.title}>
                 {date
                     ? format(date, 'd MMMM', { locale: ru })
                     : 'Резервный список'}
-            </div>
+            </h2>
             <SortableContext
                 items={projects}
                 strategy={verticalListSortingStrategy}

@@ -1,24 +1,31 @@
-$before_width: 28px;
+$draggable_width: 28px;
 $border_radius: 24px;
 
 .wrapper {
     background-color: #FFFFFF;
     border-radius: $border_radius;
     display: flex;
-    margin: 0 $before_width 24px $before_width;
+    margin: 0 $draggable_width 24px $draggable_width;
 
     &:hover {
         box-shadow: 0 0 16px 0 #662C0040;
         margin-left: 0;
         cursor: grab;
 
-        &::before {
-            content: "";
-            width: $before_width;
-            background-color: #0000000F;
-            border-radius: $border_radius 0 0 $border_radius;
+        & .draggable {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
     }
+}
+
+.draggable {
+    display: none;
+    width: $draggable_width;
+    background-color: #0000000F;
+    border-radius: $border_radius 0 0 $border_radius;
 }
 
 .container {

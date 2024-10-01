@@ -3,6 +3,7 @@ import styles from './styles.module.scss';
 import declineWord from 'decline-word';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import DraggableIcon from '../../assets/draggable-icon.svg';
 
 export const Project = ({ project }: { project: IProject }) => {
     const { id, name, numberOfParticipants } = project;
@@ -23,6 +24,10 @@ export const Project = ({ project }: { project: IProject }) => {
             {...attributes}
             {...listeners}
         >
+            <div className={styles.draggable}>
+                <DraggableIcon />
+                <DraggableIcon />
+            </div>
             <div className={styles.container}>
                 <div>
                     <div className={styles.timing}>10:00 – 10:25</div>
