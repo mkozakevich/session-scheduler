@@ -1,0 +1,50 @@
+$modal_width: 744px;
+$modal_height: min(501px, 100vh);
+
+.modal {
+    position: absolute;
+    top: calc(50% - $modal_height / 2);
+    left: calc(50% - $modal_width / 2);
+    width: $modal_width;
+    height: $modal_height;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 16px 0px #1a1a1a14;
+    border-radius: 32px;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    flex: 0.4;
+}
+
+.content {
+    flex: 0.5;
+}
+
+.footer {
+    flex: 0.1;
+    padding: 24px 32px;
+    border-top: 1px solid #0000001a;
+    display: flex;
+    justify-content: right;
+    gap: 24px;
+}
+
+.button {
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.discardButton {
+    padding: 10px 20px;
+    background-color: transparent;
+}
+
+.saveButton {
+    padding: 10px 20px;
+    background-color: #ff6d00;
+    color: #ffffff;
+    border-radius: 14px;
+}
