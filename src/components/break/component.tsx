@@ -3,11 +3,11 @@ import { format } from 'date-fns';
 import { IBreak } from '@/interfaces/IBreak';
 
 export const Break = ({ item }: { item: IBreak }) => {
-    const { start, end } = item;
+    const { startDateTime, endDateTime } = item;
 
     const timeFormatStr = 'HH:mm';
-    const startTime = format(start, timeFormatStr);
-    const endTime = format(end, timeFormatStr);
+    const startTime = format(startDateTime, timeFormatStr);
+    const endTime = format(endDateTime, timeFormatStr);
 
     return (
         <div className={styles.wrapper}>

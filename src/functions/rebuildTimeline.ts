@@ -1,4 +1,5 @@
 import { IProject } from '@/interfaces/IProject';
+import { IBreak } from '@/interfaces/IBreak';
 import { addDays, compareAsc, differenceInDays, formatISO } from 'date-fns';
 import { calculateEndDate } from './calculateEndDate';
 import { TTimeline } from '@/types/TTimeline';
@@ -18,7 +19,11 @@ export const rebuildTimeline = (
     for (let i = 1; i <= diffDays; i++) {
         const key = formatISO(currentDayDateFrom, { representation: 'date' });
         const currentDayProjects = timeline[key];
-        const newCurrentDayProjects: IProject[] = [];
+        const newCurrentDayProjects: IProject | IBreak[] = [];
+        const breakItem: IBreak | undefined = currentDayProjects.find(
+            (i) => typeof i.id === 'string'
+        ) as IBreak | undefined;
+        let breakItemPushed = false;
 
         for (let i = 0; i < currentDayProjects.length; i++) {
             const item = currentDayProjects[i];
@@ -38,6 +43,23 @@ export const rebuildTimeline = (
                     newProject.startDateTime,
                     newProject.numberOfParticipants
                 );
+
+                if (
+                    breakItem &&
+                    !breakItemPushed &&
+                    compareAsc(
+                        newProject.endDateTime,
+                        breakItem.startDateTime
+                    ) === 1
+                ) {
+                    breakItemPushed = true;
+                    newCurrentDayProjects.push(breakItem);
+                    newProject.startDateTime = breakItem.endDateTime;
+                    newProject.endDateTime = calculateEndDate(
+                        newProject.startDateTime,
+                        newProject.numberOfParticipants
+                    );
+                }
 
                 if (
                     compareAsc(newProject.endDateTime, currentDayDateTo) === 1

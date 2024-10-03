@@ -9,6 +9,7 @@ import { useContext, useState } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
 import { LabeledValue } from 'antd/es/select';
 import { addMinutes, formatISO } from 'date-fns';
+import { rebuildTimeline } from '@/functions/rebuildTimeline';
 
 const cx = classNames.bind(styles);
 
@@ -28,7 +29,8 @@ const selectOptions: LabeledValue[] = [
 ];
 
 export const BreakModal = ({ close }: { close: Function }) => {
-    const { timeline, dateFrom, setTimeline } = useContext(TimelineContext);
+    const { timeline, dateFrom, dateTo, setTimeline } =
+        useContext(TimelineContext);
 
     const [dateModel, setDateModel] = useState(dayjs(dateFrom));
     const [duration, setDuration] = useState(0);
@@ -44,11 +46,11 @@ export const BreakModal = ({ close }: { close: Function }) => {
             const newTimeline = { ...timeline };
             newTimeline[key].push({
                 id: `break-${Math.random()}`,
-                start: date,
-                end: addMinutes(date, duration),
+                startDateTime: date,
+                endDateTime: addMinutes(date, duration),
             });
 
-            setTimeline(newTimeline);
+            setTimeline(rebuildTimeline(newTimeline, dateFrom, dateTo));
         }
     };
 
