@@ -2,6 +2,7 @@ import { IProject } from '@/interfaces/IProject';
 import { addDays, compareAsc, differenceInDays, formatISO } from 'date-fns';
 import { calculateEndDate } from './calculateEndDate';
 import { TTimeline } from '@/types/TTimeline';
+import { isProject } from './isProject';
 
 export const rebuildTimeline = (
     timeline: TTimeline,
@@ -20,26 +21,32 @@ export const rebuildTimeline = (
         const newCurrentDayProjects: IProject[] = [];
 
         for (let i = 0; i < currentDayProjects.length; i++) {
-            const project = currentDayProjects[i];
-            const newProject = { ...project };
+            const item = currentDayProjects[i];
 
-            if (i === 0) {
-                newProject.startDateTime = currentDayDateFrom;
-            } else {
-                const prevProject = newCurrentDayProjects[i - 1];
-                newProject.startDateTime = prevProject.endDateTime;
-            }
+            if (isProject(item)) {
+                const project = item;
+                const newProject = { ...project };
 
-            newProject.endDateTime = calculateEndDate(
-                newProject.startDateTime,
-                newProject.numberOfParticipants
-            );
+                if (i === 0) {
+                    newProject.startDateTime = currentDayDateFrom;
+                } else {
+                    const prevProject = newCurrentDayProjects[i - 1];
+                    newProject.startDateTime = prevProject.endDateTime;
+                }
 
-            if (compareAsc(newProject.endDateTime, currentDayDateTo) === 1) {
-                reserve.push(...currentDayProjects.slice(i));
-                break;
-            } else {
-                newCurrentDayProjects.push(newProject);
+                newProject.endDateTime = calculateEndDate(
+                    newProject.startDateTime,
+                    newProject.numberOfParticipants
+                );
+
+                if (
+                    compareAsc(newProject.endDateTime, currentDayDateTo) === 1
+                ) {
+                    reserve.push(...currentDayProjects.slice(i));
+                    break;
+                } else {
+                    newCurrentDayProjects.push(newProject);
+                }
             }
         }
 
