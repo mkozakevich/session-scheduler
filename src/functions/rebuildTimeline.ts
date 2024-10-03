@@ -1,12 +1,5 @@
 import { IProject } from '@/interfaces/IProject';
-import {
-    addDays,
-    compareAsc,
-    differenceInDays,
-    formatISO,
-    isAfter,
-    isSameDay,
-} from 'date-fns';
+import { addDays, compareAsc, differenceInDays, formatISO } from 'date-fns';
 import { calculateEndDate } from './calculateEndDate';
 import { TTimeline } from '@/types/TTimeline';
 

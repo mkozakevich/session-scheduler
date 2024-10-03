@@ -145,7 +145,7 @@ export default function Timeline() {
                 <Day
                     key={key}
                     id={key}
-                    projects={value}
+                    items={value}
                     date={isValid(date) ? date : undefined}
                 ></Day>
             );

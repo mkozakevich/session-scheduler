@@ -8,14 +8,17 @@ import { format } from 'date-fns';
 import { ru } from 'date-fns/locale/ru';
 import { useDroppable } from '@dnd-kit/core';
 import styles from './styles.module.scss';
+import { IBreak } from '@/interfaces/IBreak';
+import { isProject } from '@/functions/isProject';
+import { Break } from '../break/component';
 
 export const Day = ({
     id,
-    projects,
+    items,
     date,
 }: {
     id: string;
-    projects: IProject[];
+    items: Array<IProject | IBreak>;
     date?: Date;
 }) => {
     const { setNodeRef } = useDroppable({
@@ -30,17 +33,23 @@ export const Day = ({
                     : 'Резервный список'}
             </h2>
             <SortableContext
-                items={projects}
+                items={items}
                 strategy={verticalListSortingStrategy}
             >
                 <div className={styles.projectsContainer} ref={setNodeRef}>
-                    {projects.map((project) => (
-                        <Project
-                            key={project.id}
-                            project={project}
-                            noTime={!date}
-                        />
-                    ))}
+                    {items.map((item) => {
+                        if (isProject(item)) {
+                            return (
+                                <Project
+                                    key={item.id}
+                                    project={item}
+                                    noTime={!date}
+                                />
+                            );
+                        } else {
+                            return <Break key={item.id} item={item}></Break>;
+                        }
+                    })}
                 </div>
             </SortableContext>
         </>
