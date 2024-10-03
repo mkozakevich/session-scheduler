@@ -8,6 +8,7 @@ import { TimelineContext } from '@/app/page';
 import { useContext, useState } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
 import { LabeledValue } from 'antd/es/select';
+import { addMinutes, formatISO } from 'date-fns';
 
 const cx = classNames.bind(styles);
 
@@ -27,13 +28,29 @@ const selectOptions: LabeledValue[] = [
 ];
 
 export const BreakModal = ({ close }: { close: Function }) => {
-    const { timeline, dateFrom, dateTo, setTimeline, setDateFrom, setDateTo } =
-        useContext(TimelineContext);
+    const { timeline, dateFrom, setTimeline } = useContext(TimelineContext);
 
     const [dateModel, setDateModel] = useState(dayjs(dateFrom));
-    const [duration, setDuration] = useState(selectOptions[0]);
+    const [duration, setDuration] = useState(0);
 
-    const submit = () => {};
+    const submit = () => {
+        const date = dateModel.toDate();
+        const key = formatISO(date, { representation: 'date' });
+        const isDayAlreadyHasBreak =
+            timeline[key].filter((item) => typeof item.id === 'string').length >
+            0;
+
+        if (!isDayAlreadyHasBreak) {
+            const newTimeline = { ...timeline };
+            newTimeline[key].push({
+                id: `break-${Math.random()}`,
+                start: date,
+                end: addMinutes(date, duration),
+            });
+
+            setTimeline(newTimeline);
+        }
+    };
 
     return (
         <div className={styles.modal}>
@@ -62,9 +79,8 @@ export const BreakModal = ({ close }: { close: Function }) => {
                 <div className={styles.inputContainer}>
                     <div>Продолжительность перерыва</div>
                     <Select
-                        value={duration}
                         options={selectOptions}
-                        onChange={(value: LabeledValue) => setDuration(value)}
+                        onChange={(value: number) => setDuration(value)}
                     />
                 </div>
             </div>
