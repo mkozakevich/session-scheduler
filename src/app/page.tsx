@@ -6,8 +6,8 @@ import styles from './page.module.scss';
 import { createContext, useState } from 'react';
 import { mapDataToTimeline } from '@/functions/mapDataToTimeline';
 import { data } from '@/consts/data.';
-import { IProject } from '@/interfaces/IProject';
 import { TTimeline } from '@/types/TTimeline';
+import { AddBreak } from '@/components/add-break/component';
 
 export const TimelineContext = createContext<{
     timeline: TTimeline;
@@ -45,6 +45,7 @@ export default function Home() {
         >
             <div className={styles.buttons}>
                 <EditSchedule />
+                <AddBreak />
             </div>
             <Timeline />
         </TimelineContext.Provider>
