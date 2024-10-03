@@ -32,8 +32,11 @@ export const rebuildTimeline = (
                 const project = item;
                 const newProject = { ...project };
 
-                if (i === 0) {
-                    newProject.startDateTime = currentDayDateFrom;
+                const prevProject = newCurrentDayProjects[i - 1];
+
+                if (!prevProject) {
+                    newProject.startDateTime =
+                        i === 0 ? currentDayDateFrom : breakItem!.endDateTime;
                 } else {
                     const prevProject = newCurrentDayProjects[i - 1];
                     newProject.startDateTime = prevProject.endDateTime;
