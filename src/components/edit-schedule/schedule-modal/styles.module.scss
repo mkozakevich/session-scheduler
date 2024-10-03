@@ -1,5 +1,6 @@
 $modal_width: 744px;
 $modal_height: min(501px, 100vh);
+$border_radius: 32px;
 
 .modal {
     position: absolute;
@@ -9,17 +10,64 @@ $modal_height: min(501px, 100vh);
     height: $modal_height;
     background-color: #ffffff;
     box-shadow: 0px 0px 16px 0px #1a1a1a14;
-    border-radius: 32px;
+    border-radius: $border_radius;
     display: flex;
     flex-direction: column;
 }
 
 .header {
-    flex: 0.4;
+    flex: 0.3;
+    box-shadow: 0px 0px 16px 0px #662c0040;
+    background: #fff9f5;
+    border-radius: $border_radius $border_radius 0 0;
+    padding: 24.5px 32px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.title {
+    font-size: 32px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.leftContent {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.comission {
+    display: flex;
+    flex-direction: column;
+
+    &Number {
+        color: #00000080;
+        font-weight: 300;
+    }
+
+    &Name {
+        font-size: 20px;
+        font-weight: 600;
+    }
+}
+
+.rightContent {
+    padding: 13.5px;
+
+    & .crossIcon {
+        cursor: pointer;
+    }
+}
+
+.subtitle {
+    display: flex;
+    gap: 16px;
+    align-items: center;
 }
 
 .content {
-    flex: 0.5;
+    flex: 0.6;
 }
 
 .footer {
