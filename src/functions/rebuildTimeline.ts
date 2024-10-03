@@ -1,5 +1,12 @@
 import { IProject } from '@/interfaces/IProject';
-import { addDays, compareAsc, differenceInDays, formatISO } from 'date-fns';
+import {
+    addDays,
+    compareAsc,
+    differenceInDays,
+    formatISO,
+    isAfter,
+    isSameDay,
+} from 'date-fns';
 import { calculateEndDate } from './calculateEndDate';
 import { TTimeline } from '@/types/TTimeline';
 
@@ -9,7 +16,7 @@ export const rebuildTimeline = (
     dateTo: Date
 ): TTimeline => {
     const newTimeline: TTimeline = {};
-    const reserve = [...timeline.reserve];
+    const reserve = [];
     const diffDays = differenceInDays(dateTo, dateFrom) + 1;
     let currentDayDateFrom = dateFrom;
     let currentDayDateTo = addDays(dateTo, 1 - diffDays);
@@ -47,6 +54,12 @@ export const rebuildTimeline = (
 
         currentDayDateFrom = addDays(currentDayDateFrom, 1);
         currentDayDateTo = addDays(currentDayDateTo, 1);
+    }
+
+    for (const [key, value] of Object.entries(timeline)) {
+        if (!Object.keys(newTimeline).includes(key)) {
+            reserve.push(...value);
+        }
     }
 
     return {
