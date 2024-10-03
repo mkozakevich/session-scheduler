@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useState } from 'react';
+import { useContext, useId, useState } from 'react';
 import {
     DndContext,
     DragEndEvent,
@@ -11,16 +11,13 @@ import { Day } from '@/components/day/component';
 import { isValid } from 'date-fns';
 import { Project } from '@/components/project/component';
 import { arrayMove } from '@dnd-kit/sortable';
-import { mapDataToTimeline } from '@/functions/mapDataToTimeline';
 import { rebuildTimeline } from '@/functions/rebuildTimeline';
 import { data } from '@/consts/data.';
+import { TimelineContext } from '@/app/page';
 
 export default function Timeline() {
-    const [dateFrom, setDateFrom] = useState(new Date('2024-04-01T10:00:00'));
-    const [dateTo, setDateTo] = useState(new Date('2024-04-02T19:00:00'));
-    const [timeline, setTimeline] = useState(
-        mapDataToTimeline(data, dateFrom, dateTo)
-    );
+    const { timeline, dateFrom, dateTo, setTimeline } =
+        useContext(TimelineContext);
     const [activeId, setActiveId] = useState(null);
     const id = useId();
 
@@ -63,8 +60,10 @@ export default function Timeline() {
             }
         }
 
+        let buildTimeline = () => timeline;
+
         if (typeof over?.id === 'string' && activeContainerKey !== over.id) {
-            setTimeline((timeline) => {
+            buildTimeline = () => {
                 if (!activeContainerKey) {
                     return timeline;
                 }
@@ -84,13 +83,9 @@ export default function Timeline() {
                     dateFrom,
                     dateTo
                 );
-            });
-
-            return;
-        }
-
-        if (activeContainerKey === overContainerKey) {
-            setTimeline((timeline) => {
+            };
+        } else if (activeContainerKey === overContainerKey) {
+            buildTimeline = () => {
                 if (!activeContainerKey) {
                     return timeline;
                 }
@@ -109,9 +104,9 @@ export default function Timeline() {
                     dateFrom,
                     dateTo
                 );
-            });
+            };
         } else {
-            setTimeline((timeline) => {
+            buildTimeline = () => {
                 if (!activeContainerKey || !overContainerKey) {
                     return timeline;
                 }
@@ -134,8 +129,10 @@ export default function Timeline() {
                     dateFrom,
                     dateTo
                 );
-            });
+            };
         }
+
+        setTimeline(buildTimeline());
     };
 
     const getDaysContent = () => {

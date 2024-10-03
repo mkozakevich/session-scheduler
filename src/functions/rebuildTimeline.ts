@@ -1,13 +1,14 @@
 import { IProject } from '@/interfaces/IProject';
 import { addDays, compareAsc, differenceInDays, formatISO } from 'date-fns';
 import { calculateEndDate } from './calculateEndDate';
+import { TTimeline } from '@/types/TTimeline';
 
 export const rebuildTimeline = (
-    timeline: Record<string, IProject[]>,
+    timeline: TTimeline,
     dateFrom: Date,
     dateTo: Date
-): Record<string, IProject[]> => {
-    const newTimeline: Record<string, IProject[]> = {};
+): TTimeline => {
+    const newTimeline: TTimeline = {};
     const reserve = [...timeline.reserve];
     const diffDays = differenceInDays(dateTo, dateFrom) + 1;
     let currentDayDateFrom = dateFrom;

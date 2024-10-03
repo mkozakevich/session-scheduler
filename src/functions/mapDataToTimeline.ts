@@ -1,12 +1,13 @@
 import { IProject } from '@/interfaces/IProject';
+import { TTimeline } from '@/types/TTimeline';
 import { addDays, differenceInDays, formatISO, isSameDay } from 'date-fns';
 
 export const mapDataToTimeline = (
     data: IProject[],
     dateFrom: Date,
     dateTo: Date
-): Record<string, IProject[]> => {
-    const timeline: Record<string, IProject[]> = {};
+): TTimeline => {
+    const timeline: TTimeline = {};
     const diffDays = differenceInDays(dateTo, dateFrom) + 1;
     let currentDate = dateFrom;
     let projects = [...data];
@@ -17,8 +18,7 @@ export const mapDataToTimeline = (
         );
 
         const otherProjects = projects.filter(
-            (project) =>
-                !isSameDay(project.startDateTime, currentDate)
+            (project) => !isSameDay(project.startDateTime, currentDate)
         );
 
         timeline[formatISO(currentDate, { representation: 'date' })] =
