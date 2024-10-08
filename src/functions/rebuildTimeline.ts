@@ -67,6 +67,7 @@ export const rebuildTimeline = (
                     reserve.push(...currentDayProjects.slice(i));
                     break;
                 } else {
+                    //@ts-ignore
                     newCurrentDayProjects.push(newProject);
                 }
             }
